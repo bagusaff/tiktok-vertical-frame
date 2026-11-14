@@ -2,96 +2,112 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>norther - CRT stream frame (1080x1920)</title>
+<title>norther - stream frame (1080x1920)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap">
 <style>
-:root{--accent:#C9B8FF}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#15131D}
-@keyframes cr-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
-@keyframes cr-roll{from{transform:translateY(-240px)}to{transform:translateY(900px)}}
-@keyframes cr-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
-@keyframes cr-beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-.cr-cursor{animation:cr-blink 1.1s steps(1) infinite}
-.cr-roll{animation:cr-roll 9s linear infinite}
-.cr-arrow{animation:cr-bob 1s steps(2) infinite}
-.cr-life{animation:cr-beat 1.6s steps(2) infinite}
-@keyframes cr-turn{0%,40%{transform:rotate(0deg)}50%,90%{transform:rotate(90deg)}100%{transform:rotate(0deg)}}
-.cr-turn{animation:cr-turn 3s steps(1) infinite}
-.cr-pad{width:8px;height:8px;box-shadow:8px 0px currentColor,16px 0px currentColor,24px 0px currentColor,32px 0px currentColor,40px 0px currentColor,48px 0px currentColor,56px 0px currentColor,64px 0px currentColor,72px 0px currentColor,0px 8px currentColor,8px 8px currentColor,16px 8px currentColor,32px 8px currentColor,40px 8px currentColor,48px 8px currentColor,56px 8px currentColor,64px 8px currentColor,72px 8px currentColor,80px 8px currentColor,0px 16px currentColor,8px 16px currentColor,40px 16px currentColor,48px 16px currentColor,64px 16px currentColor,80px 16px currentColor,0px 24px currentColor,8px 24px currentColor,16px 24px currentColor,32px 24px currentColor,40px 24px currentColor,48px 24px currentColor,56px 24px currentColor,64px 24px currentColor,72px 24px currentColor,80px 24px currentColor,0px 32px currentColor,8px 32px currentColor,16px 32px currentColor,24px 32px currentColor,56px 32px currentColor,64px 32px currentColor,72px 32px currentColor,80px 32px currentColor,8px 40px currentColor,16px 40px currentColor,64px 40px currentColor,72px 40px currentColor}
-@media (prefers-reduced-motion: reduce){.cr-cursor,.cr-roll,.cr-arrow,.cr-life,.cr-turn{animation:none}}
+:root{--bg:#15131D;--panel:#1C1928;--slot:#000000;--ink:#F3EBD8;--dim:#B9B1C9;--accent:#C9B8FF;--shadow:#0B0A10;--name-shadow:0 0 22px rgba(201,184,255,.45);--txt-shadow:none}
+body.t-night{--bg:#120B2E;--panel:#150D33;--ink:#F3EBFF;--dim:#C6BAE8;--accent:#C59BFF;--shadow:#07041A;--name-shadow:6px 6px 0 #07041A;--txt-shadow:3px 3px 0 #07041A}
+body.t-dusk{--bg:#141230;--panel:#1A1430;--ink:#FFF1DE;--dim:#DCC3CF;--accent:#FFC27A;--shadow:#0A0818;--name-shadow:6px 6px 0 #0A0818;--txt-shadow:3px 3px 0 #0A0818}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+#frame{position:absolute;left:0;top:0;transform-origin:0 0;width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Pixelify Sans',ui-monospace,monospace}
+#sky{position:absolute;left:0;top:0;width:1080px;height:1920px;image-rendering:pixelated;display:none}
+body.t-night #sky,body.t-dusk #sky{display:block}
+body.t-night .crt-only,body.t-dusk .crt-only{display:none}
+.glow{position:absolute;left:0;top:0;width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 12%,#2A2540 0%,rgba(21,19,29,0) 55%),radial-gradient(ellipse at 50% 80%,#241F36 0%,rgba(21,19,29,0) 60%)}
+.scan{position:absolute;left:0;width:1080px;overflow:hidden;pointer-events:none;background-image:repeating-linear-gradient(to bottom,rgba(0,0,0,.3) 0 2px,rgba(0,0,0,0) 2px 6px)}
+.roll{position:absolute;left:0;top:0;width:1080px;height:240px;background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,.05),rgba(255,255,255,0));animation:roll 9s linear infinite}
+.top{position:absolute;left:64px;right:64px;top:198px;display:flex;flex-direction:column;gap:18px;text-shadow:var(--txt-shadow)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:24px}
+.tag{padding:2px 16px;background:var(--accent);color:var(--bg);font-size:32px;font-weight:700;text-shadow:none}
+.pads{display:flex;gap:24px;color:var(--accent)}
+.life{display:block;width:88px;height:48px;animation:beat 1.6s steps(2) infinite}
+.pad{width:8px;height:8px;box-shadow:8px 0px currentColor,16px 0px currentColor,24px 0px currentColor,32px 0px currentColor,40px 0px currentColor,48px 0px currentColor,56px 0px currentColor,64px 0px currentColor,72px 0px currentColor,0px 8px currentColor,8px 8px currentColor,16px 8px currentColor,32px 8px currentColor,40px 8px currentColor,48px 8px currentColor,56px 8px currentColor,64px 8px currentColor,72px 8px currentColor,80px 8px currentColor,0px 16px currentColor,8px 16px currentColor,40px 16px currentColor,48px 16px currentColor,64px 16px currentColor,80px 16px currentColor,0px 24px currentColor,8px 24px currentColor,16px 24px currentColor,32px 24px currentColor,40px 24px currentColor,48px 24px currentColor,56px 24px currentColor,64px 24px currentColor,72px 24px currentColor,80px 24px currentColor,0px 32px currentColor,8px 32px currentColor,16px 32px currentColor,24px 32px currentColor,56px 32px currentColor,64px 32px currentColor,72px 32px currentColor,80px 32px currentColor,8px 40px currentColor,16px 40px currentColor,64px 40px currentColor,72px 40px currentColor}
+.pad{display:block}
+.stage{font-size:34px;font-weight:500;letter-spacing:2px;color:var(--dim)}
+.name{display:flex;align-items:baseline;gap:10px;font-size:92px;font-weight:700;line-height:1;text-shadow:var(--name-shadow)}
+.cursor{color:var(--accent);animation:blink 1.1s steps(1) infinite}
+.info{font-size:32px;font-weight:500;letter-spacing:1px;color:var(--dim)}
+.info b{font-weight:700;color:var(--ink)}
+.turn{display:block;width:20px;height:32px;box-sizing:border-box;border:4px solid var(--accent);animation:turn 3s steps(1) infinite}
+.slot{position:absolute;left:0;top:440px;width:1080px;height:730px;background:var(--slot)}
+.bar{position:absolute;left:0;width:1080px;height:4px;background:var(--ink)}
+.box{box-sizing:border-box;border:4px solid var(--ink);background:var(--panel);box-shadow:8px 8px 0 var(--shadow)}
+.dialog{position:absolute;left:48px;right:48px;top:1212px;min-height:168px;padding:26px 32px 30px 32px;font-size:42px;font-weight:500;line-height:1.25}
+.arrow{position:absolute;right:24px;bottom:16px;width:0;height:0;border-left:12px solid rgba(0,0,0,0);border-right:12px solid rgba(0,0,0,0);border-top:16px solid var(--accent);animation:bob 1s steps(2) infinite}
+.wins{position:absolute;left:48px;right:48px;top:1418px;height:454px;display:flex;gap:24px}
+.wt{padding:4px 20px;background:var(--ink);color:var(--bg);font-size:30px;font-weight:700;letter-spacing:2px}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes roll{from{transform:translateY(-240px)}to{transform:translateY(900px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes turn{0%,40%{transform:rotate(0deg)}50%,90%{transform:rotate(90deg)}100%{transform:rotate(0deg)}}
 </style>
 </head>
 <body>
-<div id="frame" style="position: absolute; left: 0; top: 0; transform-origin: 0 0; width: 1080px; height: 1920px; overflow: hidden; background: #15131D; color: #F3EBD8; font-family: 'Pixelify Sans', ui-monospace, monospace">
-
-<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: radial-gradient(ellipse at 50% 12%, #2A2540 0%, rgba(21,19,29,0) 55%), radial-gradient(ellipse at 50% 80%, #241F36 0%, rgba(21,19,29,0) 60%)"></div>
-
-<div style="position: absolute; left: 64px; right: 64px; top: 198px; display: flex; flex-direction: column; gap: 18px">
-<div style="display: flex; justify-content: space-between; align-items: center">
-<div style="display: flex; align-items: center; gap: 28px">
-<div style="padding: 2px 16px; background: var(--accent); color: #15131D; font-size: 32px; font-weight: 700">1P</div>
-<div aria-hidden="true" style="display: flex; gap: 24px; color: var(--accent)">
-<span class="cr-life" style="display: block; width: 88px; height: 48px"><span class="cr-pad" style="display: block"></span></span>
-<span class="cr-life" style="display: block; width: 88px; height: 48px"><span class="cr-pad" style="display: block"></span></span>
-<span class="cr-life" style="display: block; width: 88px; height: 48px"><span class="cr-pad" style="display: block"></span></span>
+<div id="frame">
+<canvas id="sky" width="135" height="240"></canvas>
+<div class="glow crt-only"></div>
+<div class="top">
+<div class="row">
+<div class="row" style="gap:28px"><div class="tag">1P</div><div class="pads"><span class="life"><span class="pad"></span></span><span class="life"><span class="pad"></span></span><span class="life"><span class="pad"></span></span></div></div>
+<div class="stage" id="stage">STAGE 01</div>
+</div>
+<div class="name"><span id="name">NORTHER</span><span class="cursor">_</span></div>
+<div class="row info">
+<div>NOW PLAYING <b id="game">GTA VI</b></div>
+<div class="row" style="gap:16px"><span class="turn"></span><span>ROTATE = FULLSCREEN</span></div>
 </div>
 </div>
-<div style="font-size: 34px; font-weight: 500; letter-spacing: 2px; color: #B9B1C9" id="stage">STAGE 01</div>
+<div class="scan crt-only" style="top:0;height:440px"></div>
+<div class="slot"></div>
+<div class="bar" style="top:436px"></div>
+<div class="bar" style="top:1170px"></div>
+<div class="dialog box"><div id="line"></div><div class="arrow"></div></div>
+<div class="wins">
+<div class="box" style="flex:1 1 0;min-width:0"><div class="wt">CHAT</div></div>
+<div class="box" style="flex:none;width:380px"><div class="wt">TOP LIKES</div></div>
 </div>
-<div style="display: flex; align-items: baseline; gap: 10px; font-size: 92px; font-weight: 700; line-height: 1; color: #F3EBD8; text-shadow: 0 0 22px rgba(201,184,255,0.45)">
-<span>NORTHER</span><span class="cr-cursor" aria-hidden="true" style="color: var(--accent)">_</span>
-</div>
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 24px; font-size: 32px; font-weight: 500; letter-spacing: 1px">
-<div style="display: flex; align-items: baseline; gap: 14px">
-<span style="color: #B9B1C9">NOW PLAYING</span><span style="font-weight: 700; color: #F3EBD8" id="game">GTA VI</span>
-</div>
-<div style="display: flex; align-items: center; gap: 16px; color: #B9B1C9">
-<span class="cr-turn" aria-hidden="true" style="display: block; width: 20px; height: 32px; box-sizing: border-box; border: 4px solid var(--accent)"></span>
-<span>ROTATE = FULLSCREEN</span>
-</div>
-</div>
-</div>
-
-<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1080px; height: 440px; pointer-events: none; background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.3) 0 2px, rgba(0,0,0,0) 2px 6px)"></div>
-
-<div style="position: absolute; left: 0; top: 440px; width: 1080px; height: 608px; background: #000000"></div>
-<div style="position: absolute; left: 0; top: 436px; width: 1080px; height: 4px; background: #F3EBD8"></div>
-<div style="position: absolute; left: 0; top: 1048px; width: 1080px; height: 4px; background: #F3EBD8"></div>
-
-<div style="position: absolute; left: 48px; right: 48px; top: 1090px; box-sizing: border-box; min-height: 168px; padding: 26px 32px 30px 32px; border: 4px solid #F3EBD8; background: #1C1928; box-shadow: 8px 8px 0 #0B0A10">
-<div style="font-size: 42px; font-weight: 500; line-height: 1.25; color: #F3EBD8" id="line"></div>
-<div class="cr-arrow" aria-hidden="true" style="position: absolute; right: 24px; bottom: 16px; width: 0; height: 0; border-left: 12px solid rgba(0,0,0,0); border-right: 12px solid rgba(0,0,0,0); border-top: 16px solid var(--accent)"></div>
-</div>
-
-<div style="position: absolute; left: 48px; right: 48px; top: 1296px; height: 576px; display: flex; gap: 24px">
-<div style="flex: 1 1 0; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; border: 4px solid #F3EBD8; background: #1C1928; box-shadow: 8px 8px 0 #0B0A10">
-<div style="padding: 4px 20px; background: #F3EBD8; color: #15131D; font-size: 30px; font-weight: 700; letter-spacing: 2px">CHAT</div>
-<div style="display: flex; flex-direction: column; gap: 18px; padding: 22px 20px; font-size: 32px; font-weight: 500; color: #B9B1C9">
-</div>
-</div>
-<div style="flex: none; width: 380px; box-sizing: border-box; display: flex; flex-direction: column; border: 4px solid #F3EBD8; background: #1C1928; box-shadow: 8px 8px 0 #0B0A10">
-<div style="padding: 4px 20px; background: #F3EBD8; color: #15131D; font-size: 30px; font-weight: 700; letter-spacing: 2px">TOP LIKES</div>
-<div style="display: flex; flex-direction: column; gap: 18px; padding: 22px 20px; font-size: 32px; font-weight: 500; color: #B9B1C9">
-</div>
-</div>
-</div>
-
-<div aria-hidden="true" style="position: absolute; left: 0; top: 1048px; width: 1080px; height: 872px; overflow: hidden; pointer-events: none">
-<div style="position: absolute; left: 0; top: 0; width: 1080px; height: 872px; background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.3) 0 2px, rgba(0,0,0,0) 2px 6px)"></div>
-<div class="cr-roll" style="position: absolute; left: 0; top: 0; width: 1080px; height: 240px; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.05), rgba(255,255,255,0))"></div>
-</div>
-
+<div class="scan crt-only" style="top:1170px;height:750px"><div class="roll"></div></div>
 </div>
 <script>
+// URL parameters: ?theme=1|2|3 (crt, night, dusk) &stage=02 &game=Roblox &line=hello &name=NORTHER &accent=9FE8A6
+var q = new URLSearchParams(location.search);
+var THEMES = {'1':'crt','2':'night','3':'dusk',crt:'crt',night:'night',dusk:'dusk'};
+var theme = THEMES[(q.get('theme') || '1').toLowerCase()] || 'crt';
+document.body.className = 't-' + theme;
+if (q.get('stage')) document.getElementById('stage').textContent = 'STAGE ' + q.get('stage');
+if (q.get('game')) document.getElementById('game').textContent = q.get('game');
+if (q.get('name')) document.getElementById('name').textContent = q.get('name');
+document.getElementById('line').textContent = q.get('line') || '';
+if (/^[0-9a-fA-F]{6}$/.test(q.get('accent') || '')) document.body.style.setProperty('--accent', '#' + q.get('accent'));
+
 // Scale the 1080x1920 frame to whatever window size the streaming app gives it
 function fit(){var f=document.getElementById('frame');var k=Math.min(window.innerWidth/1080,window.innerHeight/1920);f.style.transform='scale('+k+')';f.style.left=((window.innerWidth-1080*k)/2)+'px';f.style.top=((window.innerHeight-1920*k)/2)+'px';}
 window.addEventListener('resize',fit);fit();
-// Edit text without touching the file: add ?stage=02&game=GTA%20VI&line=hello&accent=9FE8A6 to the URL
-var q = new URLSearchParams(location.search);
-if (q.get('stage')) document.getElementById('stage').textContent = 'STAGE ' + q.get('stage');
-if (q.get('game')) document.getElementById('game').textContent = q.get('game');
-document.getElementById('line').textContent = q.get('line') || '';
-if (/^[0-9a-fA-F]{6}$/.test(q.get('accent') || '')) document.documentElement.style.setProperty('--accent', '#' + q.get('accent'));
+
+// Pixel-art sky for the night and dusk themes, drawn at 135x240 and scaled up 8x
+var SKIES = {
+night:{sky:['#120B2E','#1A1040','#241655','#2E1C6B','#3A2382'],star:'#E9DDFF',moon:['#EBD9FF','#C9B0F5'],back:'#3B2A7A',front:'#5A3FB0',rim:'#7E5FD6'},
+dusk:{sky:['#141230','#23194A','#3B2260','#5E2B6B','#8A3A6A'],star:'#FFE9C9',moon:['#FFD9A0','#F0B273'],back:'#4A2A5E','front':'#6E3766',rim:'#B85C78'}
+};
+function startSky(p){
+var c=document.getElementById('sky'),x=c.getContext('2d'),W=135,H=240,BH=16,seed=7,t=0,i;
+function r(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+var stars=[];for(i=0;i<70;i++)stars.push([Math.floor(r()*W),Math.floor(r()*H),Math.floor(r()*24)]);
+function mk(n,rmin,rmax){var a=[];for(var j=0;j<n;j++)a.push([r()*270,Math.round(rmin+r()*(rmax-rmin))]);return a;}
+var layers=[{b:mk(14,7,12),base:56,sp:0.12,col:p.back},{b:mk(11,5,9),base:58,sp:0.25,col:p.front,rim:p.rim},{b:mk(14,10,18),base:246,sp:0.1,col:p.back},{b:mk(12,7,13),base:249,sp:0.22,col:p.front,rim:p.rim}];
+function disc(cx,cy,rad,col){x.fillStyle=col;cx=Math.round(cx);cy=Math.round(cy);for(var dy=-rad;dy<=rad;dy++){var w=Math.floor(Math.sqrt(rad*rad-dy*dy));x.fillRect(cx-w,cy+dy,2*w+1,1);}}
+function draw(){
+var n=p.sky.length,y,xx,k,j;
+for(y=0;y<H;y++){var b=Math.min(n-1,Math.floor(y/BH));x.fillStyle=p.sky[b];x.fillRect(0,y,W,1);
+var e=y%BH;if(b<n-1&&e>=BH-2){x.fillStyle=p.sky[b+1];var step=(e===BH-2)?4:2;for(xx=(y%2);xx<W;xx+=step)x.fillRect(xx,y,1,1);}}
+x.fillStyle=p.star;for(k=0;k<stars.length;k++){var s=stars[k];if((t+s[2])%24<19){x.fillRect(s[0],s[1],1,1);if(k<7){x.fillRect(s[0]-1,s[1],3,1);x.fillRect(s[0],s[1]-1,1,3);}}}
+disc(112,13,9,p.moon[0]);x.fillStyle=p.moon[1];x.fillRect(108,10,2,2);x.fillRect(114,15,3,2);x.fillRect(110,18,2,1);
+for(k=0;k<layers.length;k++){var L=layers[k];for(j=0;j<L.b.length;j++){var cx=(((L.b[j][0]-t*L.sp)%270)+270)%270-67,rad=L.b[j][1],cy=L.base-Math.round(rad*0.4);if(L.rim)disc(cx,cy-1,rad,L.rim);disc(cx,cy,rad,L.col);}}
+}
+draw();setInterval(function(){t++;draw();},125);
+}
+if (SKIES[theme]) startSky(SKIES[theme]);
 </script>
 </body>
 </html>
