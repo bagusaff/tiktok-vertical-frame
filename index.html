@@ -8,11 +8,14 @@
 :root{--bg:#15131D;--panel:#1C1928;--slot:#000000;--ink:#F3EBD8;--dim:#B9B1C9;--accent:#C9B8FF;--shadow:#0B0A10;--name-shadow:0 0 22px rgba(201,184,255,.45);--txt-shadow:none}
 body.t-night{--bg:#120B2E;--panel:#150D33;--ink:#F3EBFF;--dim:#C6BAE8;--accent:#C59BFF;--shadow:#07041A;--name-shadow:6px 6px 0 #07041A;--txt-shadow:3px 3px 0 #07041A}
 body.t-dusk{--bg:#141230;--panel:#1A1430;--ink:#FFF1DE;--dim:#DCC3CF;--accent:#FFC27A;--shadow:#0A0818;--name-shadow:6px 6px 0 #0A0818;--txt-shadow:3px 3px 0 #0A0818}
+body.t-blue{--bg:#0A1230;--panel:#0C1433;--ink:#EAF3FF;--dim:#B5C6E8;--accent:#7FC4FF;--shadow:#040818;--name-shadow:6px 6px 0 #040818;--txt-shadow:3px 3px 0 #040818}
+body.t-green{--bg:#071A14;--panel:#091D17;--ink:#ECFFF2;--dim:#B4D9C2;--accent:#7EE8A2;--shadow:#030D0A;--name-shadow:6px 6px 0 #030D0A;--txt-shadow:3px 3px 0 #030D0A}
+body.t-mono{--bg:#0A0A0A;--panel:#111111;--ink:#F5F5F5;--dim:#C4C4C4;--accent:#FFFFFF;--shadow:#000000;--name-shadow:6px 6px 0 #000000;--txt-shadow:3px 3px 0 #000000}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
 #frame{position:absolute;left:0;top:0;transform-origin:0 0;width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Pixelify Sans',ui-monospace,monospace}
 #sky{position:absolute;left:0;top:0;width:1080px;height:1920px;image-rendering:pixelated;display:none}
-body.t-night #sky,body.t-dusk #sky{display:block}
-body.t-night .crt-only,body.t-dusk .crt-only{display:none}
+body.pix #sky{display:block}
+body.pix .crt-only{display:none}
 .glow{position:absolute;left:0;top:0;width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 12%,#2A2540 0%,rgba(21,19,29,0) 55%),radial-gradient(ellipse at 50% 80%,#241F36 0%,rgba(21,19,29,0) 60%)}
 .scan{position:absolute;left:0;width:1080px;overflow:hidden;pointer-events:none;background-image:repeating-linear-gradient(to bottom,rgba(0,0,0,.3) 0 2px,rgba(0,0,0,0) 2px 6px)}
 .roll{position:absolute;left:0;top:0;width:1080px;height:240px;background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,.05),rgba(255,255,255,0));animation:roll 9s linear infinite}
@@ -70,11 +73,11 @@ body.t-night .crt-only,body.t-dusk .crt-only{display:none}
 <div class="scan crt-only" style="top:1170px;height:750px"><div class="roll"></div></div>
 </div>
 <script>
-// URL parameters: ?theme=1|2|3 (crt, night, dusk) &stage=02 &game=Roblox &line=hello &name=NORTHER &accent=9FE8A6
+// URL parameters: ?theme=1..6 (crt, night, dusk, blue, green, mono) &stage=02 &game=Roblox &line=hello &name=NORTHER &accent=9FE8A6
 var q = new URLSearchParams(location.search);
-var THEMES = {'1':'crt','2':'night','3':'dusk',crt:'crt',night:'night',dusk:'dusk'};
+var THEMES = {'1':'crt','2':'night','3':'dusk','4':'blue','5':'green','6':'mono',crt:'crt',night:'night',dusk:'dusk',blue:'blue',green:'green',mono:'mono',bw:'mono'};
 var theme = THEMES[(q.get('theme') || '1').toLowerCase()] || 'crt';
-document.body.className = 't-' + theme;
+document.body.className = 't-' + theme + (theme === 'crt' ? '' : ' pix');
 if (q.get('stage')) document.getElementById('stage').textContent = 'STAGE ' + q.get('stage');
 if (q.get('game')) document.getElementById('game').textContent = q.get('game');
 if (q.get('name')) document.getElementById('name').textContent = q.get('name');
@@ -88,7 +91,10 @@ window.addEventListener('resize',fit);fit();
 // Pixel-art sky for the night and dusk themes, drawn at 135x240 and scaled up 8x
 var SKIES = {
 night:{sky:['#120B2E','#1A1040','#241655','#2E1C6B','#3A2382'],star:'#E9DDFF',moon:['#EBD9FF','#C9B0F5'],back:'#3B2A7A',front:'#5A3FB0',rim:'#7E5FD6'},
-dusk:{sky:['#141230','#23194A','#3B2260','#5E2B6B','#8A3A6A'],star:'#FFE9C9',moon:['#FFD9A0','#F0B273'],back:'#4A2A5E','front':'#6E3766',rim:'#B85C78'}
+dusk:{sky:['#141230','#23194A','#3B2260','#5E2B6B','#8A3A6A'],star:'#FFE9C9',moon:['#FFD9A0','#F0B273'],back:'#4A2A5E','front':'#6E3766',rim:'#B85C78'},
+blue:{sky:['#0A1230','#0E1A45','#13245C','#193075','#203D90'],star:'#E3F0FF',moon:['#E6F2FF','#B9D4F5'],back:'#24448F',front:'#3566C4',rim:'#4F86DB'},
+green:{sky:['#071A14','#0A2620','#0E332A','#124236','#175243'],star:'#E6FFE9',moon:['#E9FFD9','#BEE6A8'],back:'#1C5A48',front:'#2C7D5F',rim:'#3F9A70'},
+mono:{sky:['#0A0A0A','#141414','#1E1E1E','#282828','#333333'],star:'#FFFFFF',moon:['#F5F5F5','#BDBDBD'],back:'#3D3D3D',front:'#595959',rim:'#747474'}
 };
 function startSky(p){
 var c=document.getElementById('sky'),x=c.getContext('2d'),W=135,H=240,BH=16,seed=7,t=0,i;
